@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Winline Пополнение</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gx:0px;
+  --gr:0px;
+  --stage:#2A2A2D;--stage-fg:#F2F2F3;--stage-muted:#9A9AA0;--stage-line:#3A3A3F;--stage-card:#333338;
+  --page:#F5F6F8;--surface:#FFFFFF;--subtle:#EDEFF2;
+  --text:#1A1A1A;--text2:#6B6F76;--text3:#8D929C;--disabled:#B4B8C0;--on-accent:#FFFFFF;
+  --line:#E7E8EB;--line-strong:#C9CDD5;
+  --accent:#FF5A00;--accent-hover:#E85000;--accent-pressed:#CC4700;--accent-soft:#FFF1E8;
+  --success:#1DB954;--success-soft:#E5F7EC;--error:#E5383B;--error-soft:#FDECEC;
+  --warn:#C77700;--warn-soft:#FFF4DB;--info:#2F6FED;--info-soft:#E8F0FE;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;background:var(--stage);color:var(--text);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.35;padding-block:0;padding-left:var(--gx);padding-right:var(--gr)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:56px;padding-block:24px}
+.info{width:340px;align-self:stretch;display:flex;flex-direction:column;gap:20px;color:var(--stage-fg);padding-top:8px}
+.info h1{margin:0;font-size:28px;line-height:1.15;font-weight:800;letter-spacing:-.01em}
+.info p{margin:0;color:var(--stage-muted);font-size:14px;line-height:1.5;max-width:320px}
+.info h2{margin:8px 0 0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--stage-muted);font-weight:700}
+.scn{display:flex;flex-direction:column;gap:6px}
+.scn button{display:flex;flex-direction:column;gap:2px;text-align:left;padding:10px 12px;border-radius:12px;background:var(--stage-card);border:1px solid var(--stage-line);color:var(--stage-fg);font-weight:700;font-size:13px;min-height:44px}
+.scn button small{font-weight:500;color:var(--stage-muted);font-size:12px}
+.scn button[aria-pressed=true]{border-color:var(--accent);background:#3A302B}
+.restart{margin-top:4px;align-self:flex-start;padding:10px 16px;border-radius:100px;border:1px solid var(--stage-line);color:var(--stage-fg);font-weight:700;font-size:13px;min-height:44px}
+.phone{position:relative;width:412px;height:min(844px,calc(100vh - 48px));min-height:640px;border-radius:44px;background:#0F0F10;padding:10px;box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 0 1px #46464B inset;flex:none}
+.app{position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;background:var(--page);display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:10px;height:68px;padding:8px 16px 4px;background:var(--page);flex:none}
+.iconbtn{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface);transition:background .15s}
+.iconbtn:hover{background:var(--subtle)}
+.iconbtn:active{background:var(--line)}
+.balance{margin-left:auto;display:flex;flex-direction:column;align-items:flex-start;padding:5px 12px;border-radius:12px;background:var(--surface);min-height:48px;justify-content:center}
+.balance span{font-size:12px;font-weight:500;color:var(--text2);line-height:16px}
+.balance b{font-size:18px;font-weight:800;line-height:22px}
+.scroll{flex:1;overflow:auto;padding:20px 16px 16px;display:flex;flex-direction:column;gap:20px;-webkit-overflow-scrolling:touch}
+.scroll>*{flex:none}
+h2.title{margin:0;font-size:24px;line-height:1.15;font-weight:800;letter-spacing:-.01em}
+.lead{margin:6px 0 0;color:var(--text2);font-size:14px}
+.label{font-size:14px;font-weight:700;margin:0 0 10px}
+.methods{display:flex;flex-direction:column;gap:8px}
+.method{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:10px 14px 10px 10px;min-height:64px;transition:border-color .15s}
+.method .logo{width:56px;height:40px;border-radius:10px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;flex:none;overflow:hidden}
+.method .logo img,.method .logo svg{max-width:44px;max-height:30px;display:block}
+.method .logo.full{border:0;background:transparent}
+.method .logo.full img{width:56px;height:40px;max-width:none;max-height:none;object-fit:contain}
+.method .t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.method .t b{font-size:14px;font-weight:700}
+.method .t small{font-size:12px;color:var(--text2);font-weight:500}
+.radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-strong);flex:none;display:grid;place-items:center}
+.method:not(:disabled):not([aria-checked=true]):hover{border-color:var(--line-strong);background:#FAFAFB}
+.method:not(:disabled):not([aria-checked=true]):hover .radio{border-color:var(--text3)}
+.method:not(:disabled):active{background:var(--subtle)}
+.method[aria-checked=true]{border-color:var(--accent)}
+.method[aria-checked=true] .radio{border-color:var(--accent)}
+.method[aria-checked=true] .radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.method:disabled{background:var(--page);cursor:not-allowed}
+.method:disabled .t b,.method:disabled .t small{color:var(--disabled)}
+.method:disabled .logo{opacity:.45;filter:grayscale(1)}
+.method:disabled .radio{border-color:var(--line)}
+.field{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:10px 16px;display:flex;align-items:center;gap:8px;min-height:64px;transition:border-color .15s}
+.field:focus-within{border-color:var(--accent)}
+.field.err{border-color:var(--error);background:var(--error-soft)}
+.field input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:28px;font-weight:800;color:var(--text);outline:none;padding:0;height:44px}
+.field input::placeholder{color:var(--disabled)}
+.field .cur{font-size:14px;font-weight:800;color:var(--text2)}
+.hint{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--text2);min-height:16px}
+.hint.err{color:var(--error);font-weight:600}
+.chips{display:flex;gap:8px;margin-top:12px}
+.chip{flex:1;height:44px;border-radius:12px;background:var(--surface);border:1.5px solid var(--line);font-weight:700;font-size:14px}
+.chip:not(:disabled):hover{border-color:var(--line-strong);background:#FAFAFB}
+.chip[aria-pressed=true]:hover{border-color:var(--accent);background:var(--accent-soft)}
+.chip[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-pressed)}
+.chip:disabled{color:var(--disabled);background:var(--page)}
+.alert{display:flex;gap:12px;padding:12px 14px;border-radius:14px;background:var(--info-soft);color:var(--text)}
+.alert svg{flex:none;margin-top:1px}
+.alert b{display:block;font-size:14px;font-weight:700}
+.alert span{display:block;margin-top:2px;font-size:13px;color:var(--text2)}
+.alert.warn{background:var(--warn-soft)}
+.link{align-self:flex-start;color:var(--accent);font-weight:700;font-size:14px;min-height:44px;display:inline-flex;align-items:center;gap:6px}
+.link:hover{color:var(--accent-hover)}
+.link:active{color:var(--accent-pressed)}
+.actions{flex:none;display:flex;flex-direction:column;gap:8px;padding:12px 16px;background:var(--surface);border-top:1px solid var(--line)}
+.btn{height:52px;border-radius:14px;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;transition:background .15s}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{background:var(--accent-hover)}
+.btn.primary:active{background:var(--accent-pressed)}
+.btn.primary:disabled{background:var(--subtle);color:var(--disabled);cursor:not-allowed}
+.btn.secondary{background:var(--surface);border:1.5px solid var(--line-strong);color:var(--text);height:48px}
+.btn.secondary:hover{background:var(--page);border-color:var(--text3)}
+.btn.secondary:active{background:var(--subtle)}
+.spin{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--line-strong);border-top-color:var(--text2);animation:sp .6s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.tabbar{flex:none;height:64px;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;font-weight:700;color:var(--text3);min-height:44px}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--accent)}
+.res{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding-top:12px}
+.badge{width:72px;height:72px;border-radius:50%;display:grid;place-items:center}
+.badge.ok{background:var(--success-soft)}.badge.bad{background:var(--error-soft)}.badge.wait{background:var(--warn-soft)}.badge.warn{background:var(--accent-soft)}
+.res h2{margin:4px 0 0;font-size:24px;font-weight:800;line-height:1.15}
+.res p{margin:0;color:var(--text2);font-size:14px;max-width:320px}
+.rows{background:var(--surface);border:1px solid var(--line);border-radius:16px;width:100%;text-align:left}
+.row{display:flex;justify-content:space-between;gap:12px;padding:13px 16px;font-size:14px}
+.row+.row{border-top:1px solid var(--line)}
+.row span{color:var(--text2)}.row b{font-weight:700;text-align:right}
+.row b.pos{color:var(--success)}
+.steps{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px 0;text-align:left}
+.step{display:flex;align-items:center;gap:12px;padding:12px 16px;font-size:14px;font-weight:600;color:var(--text3)}
+.step i{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-strong);display:grid;place-items:center;flex:none}
+.step.now{color:var(--text)}
+.step.now i{border-color:var(--line-strong);border-top-color:var(--accent);animation:sp .6s linear infinite}
+.step.done{color:var(--text)}
+.step.done i{background:var(--success);border-color:var(--success)}
+.sheet-bg{position:absolute;inset:0;background:rgba(26,26,26,.5);display:flex;align-items:flex-end;z-index:20}
+.sheet{width:100%;background:var(--surface);border-radius:24px 24px 0 0;padding:20px 16px 16px;display:flex;flex-direction:column;gap:14px;max-height:90%;overflow:auto}
+.sheet h3{margin:0;font-size:20px;font-weight:800}
+.sheet p{margin:0;color:var(--text2)}
+.sheet textarea{width:100%;min-height:96px;border-radius:14px;border:1.5px solid var(--line);background:var(--page);padding:12px 14px;font:inherit;font-size:14px;resize:none;color:var(--text)}
+.toast{position:absolute;left:16px;right:16px;bottom:88px;background:#1A1A1A;color:#fff;border-radius:14px;padding:13px 16px;font-weight:600;font-size:14px;z-index:30;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;text-align:center}
+.toast.show{opacity:1;transform:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:760px){
+  .stage{display:block;padding-block:0;min-height:100vh}
+  .info{display:none}
+  .phone{width:100%;height:100vh;min-height:0;border-radius:0;padding:0;box-shadow:none;background:transparent}
+  .app{border-radius:0}
+  @supports (height:100dvh){.phone{height:100dvh}}
+}
+@media (min-width:761px) and (max-width:1000px){.info{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition:none!important}}
+</style>
+
+<div class="stage">
+  <aside class="info">
+    <div>
+      <h1>Winline, пополнение счёта</h1>
+    </div>
+    <p>Кликабельный прототип тестового задания. Выберите способ оплаты, введите сумму и пройдите путь до результата. Внутри собраны и негативные сценарии.</p>
+    <h2>Что произойдёт после оплаты</h2>
+    <div class="scn" id="scn"></div>
+    <button class="restart" id="restart" type="button">Начать сначала</button>
+  </aside>
+  <div class="phone"><div class="app" id="app"></div></div>
+</div>
+
+<script>
+(function(){
+var LOGOS={erip:"data:image/png;base64,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",belkart:"data:image/png;base64,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",apple:"data:image/png;base64,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",google:"data:image/png;base64,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"};
+var METHODS=[
+ {id:'card',name:'Банковская карта',max:2000,sub:'Сохранённый способ · от 5 до 2000 BYN'},
+ {id:'erip',name:'ЕРИП',max:1500,sub:'От 5 до 1500 BYN · без комиссии'},
+ {id:'belkart',name:'Белкарт',max:2000,sub:'От 5 до 2000 BYN · без комиссии'},
+ {id:'apple',name:'Apple Pay',max:2000,sub:'Доступно в Safari на устройствах Apple',off:true},
+ {id:'google',name:'Google Pay',max:1000,sub:'От 5 до 1000 BYN · без комиссии'}
+];
+var SCN=[
+ {id:'auto',t:'Автоматически',d:'13 BYN: отказ банка. 66 BYN: не хватает средств. ЕРИП: проверка. Остальное: успех'},
+ {id:'success',t:'Успех',d:'Баланс пополнен'},
+ {id:'failed',t:'Отказ банка',d:'Платёж не прошёл, код ошибки 05'},
+ {id:'insufficient',t:'Не хватает средств',d:'Недостаточно денег на карте'},
+ {id:'pending',t:'Ожидание',d:'Платёж в обработке'},
+ {id:'unavailable',t:'ЕРИП недоступен',d:'Способ отключён, выбрана карта'}
+];
+var S;
+function fresh(){S={screen:'form',method:'card',raw:'',balance:104.5,scn:'auto',forced:null,unavailable:false,sheet:false,outcome:null,last:null,step:0,note:''};}
+fresh();
+var $=function(s,r){return (r||document).querySelector(s)};
+var app=$('#app'),toastT,runT;
+function fmt(n){return String(Number(n.toFixed(2)))}
+function amt(){var v=parseFloat(String(S.raw).replace(',','.'));return isNaN(v)?null:v}
+function meth(id){return METHODS.filter(function(m){return m.id===id})[0]}
+function valid(){var a=amt(),m=meth(S.method);return a!==null&&a>=5&&a<=m.max}
+var I={
+ back:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+ info:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6FED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+ warn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C77700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0zM12 9v4M12 17h.01"/></svg>',
+ err:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E5383B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5h.01"/></svg>',
+ check:'<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ x:'<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E5383B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+ clock:'<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C77700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+ wallet:'<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="14" rx="3"/><path d="M2.5 10h19M16 15h2"/></svg>',
+ tick:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ t1:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>',
+ t2:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3c3 3 3 15 0 18M3 12h18"/></svg>',
+ t3:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7" width="19" height="11" rx="3"/><path d="M7 11v3M10.5 12.5H7M16 11.5h.01M18 13.5h.01"/></svg>',
+ t4:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6a2 2 0 000 4v6H4v-6a2 2 0 000-4z"/><path d="M9 9h6M9 15h6"/></svg>',
+ t5:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>',
+ card:'<svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect x="3" y="7" width="24" height="16" rx="3.5" fill="#2B2B2B"/><rect x="3" y="11" width="24" height="3.5" fill="#FF5A00"/><rect x="6.5" y="18" width="7" height="2" rx="1" fill="#fff" opacity=".8"/></svg>',
+ belkart:'<svg width="44" height="26" viewBox="0 0 44 26" fill="none"><rect x="1" y="3" width="42" height="20" rx="5" fill="#0B8A4B"/><path d="M1 11h42v4H1z" fill="#fff" opacity=".9"/><text x="22" y="9.4" text-anchor="middle" font-family="Manrope,Arial" font-weight="800" font-size="6" fill="#fff">БЕЛКАРТ</text></svg>',
+ apple:'<svg width="44" height="26" viewBox="0 0 44 26" fill="none"><circle cx="9.6" cy="14" r="4.8" fill="#1A1A1A"/><circle cx="11.8" cy="12.2" r="3.4" fill="#1A1A1A"/><path d="M10 7.8c0-1.4 1-2.5 2.4-2.8" stroke="#1A1A1A" stroke-width="1.4" stroke-linecap="round"/><text x="17" y="19" font-family="Manrope,Arial" font-weight="700" font-size="14" fill="#1A1A1A">Pay</text></svg>',
+ google:'<svg width="44" height="26" viewBox="0 0 44 26" fill="none"><text x="3" y="19" font-family="Manrope,Arial" font-weight="800" font-size="17" fill="#4285F4">G</text><text x="17" y="19" font-family="Manrope,Arial" font-weight="700" font-size="14" fill="#5F6368">Pay</text><rect x="14.5" y="6" width="1.6" height="1.6" rx=".8" fill="#EA4335"/><rect x="14.5" y="9" width="1.6" height="1.6" rx=".8" fill="#FBBC05"/><rect x="14.5" y="12" width="1.6" height="1.6" rx=".8" fill="#34A853"/></svg>'
+};
+function logo(id){return LOGOS[id]?'<img alt="" src="'+LOGOS[id]+'">':I[id]}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function toast(t){var el=$('.toast',app);if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove('show')},1800)}
+function tabbar(){var T=[['Казино','t1'],['Спорт','t2'],['Киберспорт','t3'],['Купон','t4'],['Профиль','t5']];
+ return '<nav class="tabbar" aria-label="Разделы">'+T.map(function(t){return '<button class="tab" type="button" data-tab="'+t[0]+'">'+I[t[1]]+'<span>'+t[0]+'</span></button>'}).join('')+'</nav>'}
+function topbar(){return '<header class="topbar"><button class="iconbtn" type="button" id="back" aria-label="Назад">'+I.back+'</button><div class="balance" aria-label="Баланс"><span>Баланс</span><b>'+fmt(S.balance)+' BYN</b></div></header>'}
+function support(){return '<button class="link" type="button" data-support><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>Написать в поддержку</button>'}
+function sheet(){
+ var a=amt(),m=meth(S.method);
+ return '<div class="sheet-bg" id="sheetbg"><div class="sheet" role="dialog" aria-modal="true" aria-label="Поддержка"><h3>Написать в поддержку</h3><p>Опишите, что произошло. Мы уже подставили данные платежа.</p>'+
+ '<div class="rows"><div class="row"><span>Сумма</span><b>'+(a!==null?fmt(a)+' BYN':'не указана')+'</b></div><div class="row"><span>Способ</span><b>'+esc(m.name)+'</b></div></div>'+
+ '<textarea id="msg" placeholder="Ваше сообщение" aria-label="Сообщение"></textarea>'+
+ '<button class="btn primary" type="button" id="sendmsg">Отправить</button><button class="btn secondary" type="button" id="closesheet">Закрыть</button></div></div>'}
+function render(){
+ var h='',sc=S.screen;
+ if(sc==='form')h=formHTML();
+ else if(sc==='loading')h=loadingHTML();
+ else h=resultHTML();
+ app.innerHTML=h+(S.sheet?sheet():'')+'<div class="toast" role="status"></div>';
+ bind();
+}
+function formHTML(){
+ var a=amt(),m=meth(S.method),ok=valid(),over=a!==null&&a>m.max,under=a!==null&&a<5,err=(over||under);
+ var hint=err?'<div class="hint err" id="hint">'+I.err+'<span>'+(under?'Минимальная сумма 5 BYN':'Максимум '+m.max+' BYN за одну операцию')+'</span></div>':'<div class="hint" id="hint">Минимум 5 BYN, максимум '+m.max+' BYN</div>';
+ var list=METHODS.map(function(x){
+  var off=x.off||(x.id==='erip'&&S.unavailable);
+  var sub=x.id==='erip'&&S.unavailable?'Технические работы до 14:00':x.sub;
+  return '<button type="button" role="radio" class="method" data-m="'+x.id+'" aria-checked="'+(S.method===x.id)+'"'+(off?' disabled':'')+'><span class="logo'+(x.id==='erip'||x.id==='card'?'':' full')+'">'+logo(x.id)+'</span><span class="t"><b>'+x.name+'</b><small>'+sub+'</small></span><span class="radio"></span></button>'}).join('');
+ var chips=[10,20,50,100].map(function(v){return '<button type="button" class="chip" data-chip="'+v+'" aria-pressed="'+(a===v)+'">'+v+' BYN</button>'}).join('');
+ return topbar()+'<main class="scroll" id="sc"><div><h2 class="title">Пополнение счёта</h2><p class="lead">Выберите способ оплаты и введите сумму.</p></div>'+
+ (S.unavailable?'<div class="alert warn">'+I.warn+'<div><b>ЕРИП временно недоступен</b><span>Мы выбрали банковскую карту. Остальные способы работают.</span></div></div>':'')+
+ '<section><p class="label">Способ оплаты</p><div class="methods" role="radiogroup" aria-label="Способ оплаты" id="methods">'+list+'</div></section>'+
+ '<section id="amountsec"><p class="label"><label for="amt">Сумма пополнения</label></p><div class="field'+(err?' err':'')+'" id="field"><input id="amt" inputmode="decimal" autocomplete="off" placeholder="0" value="'+esc(S.raw)+'" aria-describedby="hint"'+(err?' aria-invalid="true"':'')+'><span class="cur">BYN</span></div>'+hint+'<div class="chips">'+chips+'</div></section>'+
+ '<div class="alert">'+I.info+'<div><b>Зачисление до 5 минут</b><span>Если деньги не пришли, напишите в поддержку.</span></div></div>'+support()+'</main>'+
+ '<div class="actions"><button class="btn primary" type="button" id="pay"'+(ok?'':' disabled')+'>'+(ok?'Пополнить '+fmt(a)+' BYN':'Пополнить')+'</button><button class="btn secondary" type="button" id="cancel">Отмена</button></div>'+tabbar();
+}
+var STEPS=['Запрос отправлен в банк','Ждём подтверждение','Зачисляем на счёт'];
+function loadingHTML(){
+ return topbar()+'<main class="scroll"><div class="res" style="padding-top:20px"><div class="badge warn">'+I.wallet+'</div><h2>Обрабатываем платёж</h2><p>Не закрывайте страницу и не нажимайте «Назад». Это займёт несколько секунд.</p></div>'+
+ '<div class="steps" id="steps">'+STEPS.map(function(t,i){var c=i<S.step?'done':(i===S.step?'now':'');return '<div class="step '+c+'"><i>'+(i<S.step?I.tick:'')+'</i>'+t+'</div>'}).join('')+'</div></main>'+
+ '<div class="actions"><button class="btn primary" type="button" disabled><span class="spin"></span>Подождите</button></div>'+tabbar();
+}
+function resultHTML(){
+ var o=S.outcome,a=S.last.a,m=meth(S.last.m),A=fmt(a)+' BYN',b,rows,btns,badge,title,text;
+ if(o==='failed'){badge='<div class="badge bad">'+I.x+'</div>';title='Платёж не прошёл';text='Банк отклонил операцию, деньги с карты не списаны. Попробуйте ещё раз. Если ошибка повторится, обратитесь в поддержку.';
+  rows=[['Сумма',A],['Способ',m.name],['Код ошибки','05']];
+  btns='<button class="btn primary" type="button" data-act="retry">Повторить '+A+'</button><button class="btn secondary" type="button" data-act="other">Другой способ</button>'}
+ else if(o==='insufficient'){badge='<div class="badge bad">'+I.wallet+'</div>';title='Не хватает средств';text='Пополните карту или выберите другой способ. Сумма '+A+' сохранена.';rows=null;
+  btns='<button class="btn primary" type="button" data-act="other">Другой способ</button><button class="btn secondary" type="button" data-act="amount">Изменить сумму</button>'}
+ else if(o==='pending'){badge='<div class="badge wait">'+I.clock+'</div>';title='Проверяем платёж';text='Обычно это занимает до 5 минут. Баланс обновится сам, страницу можно закрыть.';
+  rows=[['Сумма',A],['Способ',m.name],['Статус','В обработке']];
+  btns='<button class="btn primary" type="button" data-act="games">К играм</button><button class="btn secondary" type="button" data-act="history">История операций</button>'}
+ else{badge='<div class="badge ok">'+I.check+'</div>';title='Баланс пополнен';text=A+' уже на счёте. Удачной игры.';
+  rows=[['Зачислено','+'+A,1],['Новый баланс',fmt(S.balance)+' BYN']];
+  btns='<button class="btn primary" type="button" data-act="games">Играть</button><button class="btn secondary" type="button" data-act="again">Пополнить ещё</button>'}
+ var rh=rows?'<div class="rows">'+rows.map(function(r){return '<div class="row"><span>'+r[0]+'</span><b'+(r[2]?' class="pos"':'')+'>'+r[1]+'</b></div>'}).join('')+'</div>':'';
+ var sup=(o==='failed'||o==='pending')?support():'';
+ return topbar()+'<main class="scroll"><div class="res">'+badge+'<h2>'+title+'</h2><p>'+text+'</p></div>'+rh+sup+'</main><div class="actions">'+btns+'</div>'+tabbar();
+}
+function bind(){
+ var back=$('#back',app);if(back)back.onclick=function(){
+  if(S.screen==='form')toast('Это первый экран прототипа');
+  else if(S.screen==='loading')toast('Дождитесь окончания обработки');
+  else{S.screen='form';render()}};
+ var tabs=app.querySelectorAll('[data-tab]');for(var i=0;i<tabs.length;i++)tabs[i].onclick=function(){toast('Раздел вне прототипа')};
+ var sp=app.querySelectorAll('[data-support]');for(i=0;i<sp.length;i++)sp[i].onclick=function(){S.sheet=true;render()};
+ var cs=$('#closesheet',app);if(cs)cs.onclick=function(){S.sheet=false;render()};
+ var bg=$('#sheetbg',app);if(bg)bg.onclick=function(e){if(e.target===bg){S.sheet=false;render()}};
+ var sm=$('#sendmsg',app);if(sm)sm.onclick=function(){S.sheet=false;render();toast('Сообщение отправлено')};
+ if(S.screen==='form'){
+  var ms=app.querySelectorAll('[data-m]');for(i=0;i<ms.length;i++)ms[i].onclick=function(){S.method=this.getAttribute('data-m');render()};
+  var inp=$('#amt',app);
+  inp.oninput=function(){var v=this.value.replace(/[^0-9.,]/g,'').replace(',','.');var p=v.split('.');if(p.length>2)v=p[0]+'.'+p.slice(1).join('');var q=v.split('.');if(q[1]&&q[1].length>2)v=q[0]+'.'+q[1].slice(0,2);if(v.length>7)v=v.slice(0,7);S.raw=v;this.value=v;refresh()};
+  var ch=app.querySelectorAll('[data-chip]');for(i=0;i<ch.length;i++)ch[i].onclick=function(){S.raw=this.getAttribute('data-chip');inp.value=S.raw;refresh()};
+  $('#pay',app).onclick=pay;
+  $('#cancel',app).onclick=function(){S.raw='';render();toast('Пополнение отменено')};
+ }
+ var ac=app.querySelectorAll('[data-act]');for(i=0;i<ac.length;i++)ac[i].onclick=function(){act(this.getAttribute('data-act'))};
+}
+function refresh(){
+ var a=amt(),m=meth(S.method),ok=valid(),under=a!==null&&a<5,over=a!==null&&a>m.max,err=under||over;
+ var f=$('#field',app),h=$('#hint',app),pay=$('#pay',app),inp=$('#amt',app);
+ f.className='field'+(err?' err':'');
+ if(err){inp.setAttribute('aria-invalid','true');h.className='hint err';h.innerHTML=I.err+'<span>'+(under?'Минимальная сумма 5 BYN':'Максимум '+m.max+' BYN за одну операцию')+'</span>'}
+ else{inp.removeAttribute('aria-invalid');h.className='hint';h.textContent='Минимум 5 BYN, максимум '+m.max+' BYN'}
+ pay.disabled=!ok;pay.textContent=ok?'Пополнить '+fmt(a)+' BYN':'Пополнить';
+ var ch=app.querySelectorAll('[data-chip]');for(var i=0;i<ch.length;i++)ch[i].setAttribute('aria-pressed',String(a===Number(ch[i].getAttribute('data-chip'))));
+}
+function decide(a,m){
+ if(S.forced){var f=S.forced;S.forced=null;S.scn='auto';syncScn();return f}
+ if(a===13)return 'failed';
+ if(a===66)return 'insufficient';
+ if(m==='erip')return 'pending';
+ return 'success';
+}
+function pay(){
+ if(!valid())return;
+ var a=amt(),m=S.method;
+ S.last={a:a,m:m};S.step=0;S.screen='loading';render();
+ var out=decide(a,m);
+ clearTimeout(runT);
+ var n=0;
+ (function tick(){
+  runT=setTimeout(function(){
+   n++;S.step=n;
+   if(n<STEPS.length){var st=$('#steps',app);if(st){st.innerHTML=STEPS.map(function(t,i){var c=i<n?'done':(i===n?'now':'');return '<div class="step '+c+'"><i>'+(i<n?I.tick:'')+'</i>'+t+'</div>'}).join('')}tick()}
+   else{S.outcome=out;if(out==='success')S.balance=Number((S.balance+a).toFixed(2));S.screen='result';render()}
+  },1100);
+ })();
+}
+function act(x){
+ if(x==='retry'){S.raw=fmt(S.last.a);S.method=S.last.m;S.screen='form';render();pay()}
+ else if(x==='other'){S.screen='form';render();var el=$('#methods',app);if(el)el.scrollIntoView({block:'center'})}
+ else if(x==='amount'){S.screen='form';render();var i=$('#amt',app);if(i){i.focus();i.select&&i.select()}}
+ else if(x==='again'){S.raw='';S.screen='form';render()}
+ else if(x==='games')toast('Раздел вне прототипа');
+ else if(x==='history')toast('Раздел вне прототипа');
+}
+function syncScn(){var b=document.querySelectorAll('#scn button');for(var i=0;i<b.length;i++)b[i].setAttribute('aria-pressed',String(b[i].getAttribute('data-s')===S.scn))}
+function buildScn(){
+ var el=$('#scn');el.innerHTML=SCN.map(function(s){return '<button type="button" data-s="'+s.id+'" aria-pressed="'+(s.id===S.scn)+'">'+s.t+'<small>'+s.d+'</small></button>'}).join('');
+ var b=el.querySelectorAll('button');for(var i=0;i<b.length;i++)b[i].onclick=function(){
+  var id=this.getAttribute('data-s');S.scn=id;S.forced=null;
+  if(id==='unavailable'){S.unavailable=true;S.method='card';S.screen='form';clearTimeout(runT);render()}
+  else{if(S.unavailable){S.unavailable=false}
+   if(id!=='auto')S.forced=id;
+   if(S.screen!=='form'&&S.screen!=='loading'){}
+   render()}
+  syncScn();
+ };
+}
+$('#restart').onclick=function(){clearTimeout(runT);fresh();syncScn();render()};
+buildScn();render();
+})();
+</script>
+
+</html>
